@@ -273,4 +273,144 @@ Date:   Tue Feb 28 09:34:14 2017 +0100
     My first commit!
 ----
 
-We're done with the basics, the next chapter will explain how to collaborate !
+
+<<<
+=== Mode advanced features
+
+==== Branches
+
+Branches is a powerful feature of Git. It allows to "fork" your code and to isolate
+the code the time you develop a geature or fix a bug. Any code belongs to a branch
+even the one you've just created as Git creates a default branch called "master".
+
+.You can list the branches of your repository with the following command
+----
+fabien@izanagi ~/my_awesome_project » git branch
+* master
+----
+
+.Creating a branch is very cheap and easy
+----
+fabien@izanagi ~/my_awesome_project » git branch python3
+fabien@izanagi ~/my_awesome_project » git branch
+* master <1>
+  python3
+----
+<1> The asterisk indicates your current branch
+
+.To work on your new branch, you need to checkout it
+----
+fabien@izanagi ~/my_awesome_project » git checkout python3
+Switched to branch 'python3'
+fabien@izanagi ~/my_awesome_project » git status
+On branch python3
+nothing to commit, working tree clean
+----
+
+[NOTE]
+You can create and checkout a branch in one command : `*git checkout -b python3*`
+
+.Now we have a nice "python3" branch, it's time to update our code to bring Python3 compability
+[source,python]
+----
+#!/usr/bin/env python
+
+def greetings():
+    print("Hello RESIF people!")
+
+
+if __name__ == "__main__":
+    greetings()
+----
+
+.And to commit our modifications
+----
+fabien@izanagi ~/my_awesome_project » git commit -a -m 'Add Python3 support'
+[python3 34350f2] Add Python3 support
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+----
+
+[NOTE]
+You can use `*-a*` flag to automatically stage all the modifications while you commit
+
+.Let's have a look to the repository graph
+----
+                                                                     <3>
+    * 34350f2 - Add Python3 support                                (HEAD -> python3)
+    |                                                                          <2>
+    |
+    |
+    * b6cb2cc - What an improvement!                                        (master)
+    |                                                                          <1>
+    |
+    |
+    * 64188b7 - My first commit!
+----
+<1> Our previous was made on the `*master*` branch...
+<2> ... while the last was make on the `*python3*` branch
+<3> Our last commit became the new HEAD of the repository
+
+.Suddlendly, we need to bring some modifications on our main branch
+[source,python]
+----
+fabien@izanagi ~/my_awesome_project » git checkout master
+Switched to branch 'master'
+fabien@izanagi ~/my_awesome_project » cat app.py <1>
+#!/usr/bin/env python2
+
+def greetings():
+    print "Hello RESIF people!"
+
+
+if __name__ == "__main__":
+    greetings()
+----
+<1> Git has updated automatically our workdir with the last version of the code from the `*master*` branch
+
+.Add a new function `*repeat()*` and use it
+[source,python]
+----
+#!/usr/bin/env python2
+
+def greetings():
+    print "Hello RESIF people!"
+
+def repeat(x, callback):
+    for _ in range(x):
+        callback()
+
+
+if __name__ == "__main__":
+    repeat(3, greetings)
+----
+
+.As usual, commit our work
+----
+fabien@izanagi ~/my_awesome_project » git commit -a -m 'Add repeat() function'
+[master 449e0a0] Add repeat() function
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+----
+
+.Two versions of our code
+----
+        <2>
+    * 449e0a0 - Add repeat() function                               (HEAD -> master)
+    |                                                                 <1>
+    |      <2>
+    |  * 34350f2 - Add Python3 support                                     (python3)
+    | /
+    |/
+    |
+    |
+    * b6cb2cc - What an improvement!
+    |
+    |
+    |
+    * 64188b7 - My first commit!
+----
+<1> Our last commit became the new HEAD of the repository
+<2> Now we have two versions of our code, one in the `*master*` and a second one in the `*python3*` branch
+
+[NOTE]
+Branches are useful when some modifications are difficult to implement (tricky bugs, big features),
+it's a way to store the work in progress without breaking the rest of the code
