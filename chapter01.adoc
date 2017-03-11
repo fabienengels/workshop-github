@@ -414,3 +414,175 @@ fabien@izanagi ~/my_awesome_project » git commit -a -m 'Add repeat() function'
 [NOTE]
 Branches are useful when some modifications are difficult to implement (tricky bugs, big features),
 it's a way to store the work in progress without breaking the rest of the code
+
+
+<<<
+==== Merging
+
+It's time to bring back Python3 support to our main branch `*master*`. This is done using the `*git merge*`
+command.
+
+.First we can check the differences between the two branches
+[source,python]
+----
+fabien@izanagi Sync/my_awesome_project (master) » git diff master python3
+diff --git a/app.py b/app.py
+index f2aa257..436cd75 100755
+--- a/app.py
++++ b/app.py
+@@ -1,12 +1,8 @@
+-#!/usr/bin/env python2
++#!/usr/bin/env python
+
+ def greetings():
+-    print "Hello RESIF people!"
+-
+-def repeat(x, callback):
+-    for _ in range(x):
+-        callback()
++    print("Hello RESIF people!")
+
+
+ if __name__ == "__main__":
+-    repeat(3, greetings)
++    greetings()
+----
+
+.Now, let's try to merge python3 and master
+----
+fabien@izanagi ~/my_awesome_project » git checkout master <1>
+Already on 'master'
+fabien@izanagi ~/my_awesome_project » git merge python3
+Auto-merging app.py
+Merge made by the 'recursive' strategy.
+ app.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+----
+<1> Be sure to checkout the branch which will receive the changes
+
+.Did it work ?
+----
+fabien@izanagi ~/my_awesome_project (master) » python app.py
+Hello RESIF people!
+Hello RESIF people!
+Hello RESIF people!
+----
+
+.What happened
+----
+          <1>
+    *   6ebe8a3 - Merge branch 'python3'                            (HEAD -> master)
+    |\
+    | |
+    | |
+    | * 34350f2 - Add Python3 support                                      (python3)
+    | |
+    | |
+    | |
+    * | 449e0a0 - Add repeat() function
+    |/
+    |
+    |
+    * b6cb2cc - What an improvement!
+    |
+    |
+    |
+    * 64188b7 - My first commit!
+----
+<1> The merge created a new commit on `*master*`
+
+
+<<<
+==== Restore a file
+
+.You've started to work on your code
+[source,python]
+----
+fabien@namazu ~/my_awesome_project (master *) » git diff
+diff --git a/app.py b/app.py
+index aac437d..741b2f6 100755
+--- a/app.py
++++ b/app.py
+@@ -7,6 +7,9 @@ def repeat(x, callback):
+     for _ in range(x):
+         callback()
+
++def an_useless_function(message):
++    print(message)
++
+
+ if __name__ == "__main__":
+     repeat(3, greetings)
+----
+
+.Maybe not enough coffee this morning, you realize your function pretty useless, let's restore the last version committed in our repository
+----
+fabien@namazu ~/my_awesome_project (master *) » git checkout app.py <1>
+fabien@namazu ~/my_awesome_project (master) » git diff <2>
+----
+<1> We ask to git to checkout the last version of app.py
+<2> We verify that there is no more modifications
+
+
+You can restore any version of your code
+
+.List your commits
+----
+fabien@namazu ~/my_awesome_project (master) » git log --oneline
+6ebe8a3 Merge branch 'python3'
+449e0a0 Add repeat() function
+34350f2 Add Python3 support
+b6cb2cc What an improvement!
+64188b7 My first commit!
+----
+
+.Want to go back to the very first version ?
+----
+fabien@namazu ~/my_awesome_project (master) » git checkout 64188b7
+Note: checking out '64188b7'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 64188b7... My first commit!
+----
+
+.Your old code is back
+[source,python]
+----
+fabien@namazu ~/my_awesome_project (HEAD (no branch)) » cat app.py
+#!/usr/bin/env python2
+
+def greetings():
+    print "Hello world!"
+
+
+if __name__ == "__main__":
+    greetings()
+----
+
+.You can switch back to the last version
+----
+fabien@namazu ~/my_awesome_project (HEAD (no branch)) » git checkout master
+Previous HEAD position was 64188b7... My first commit!
+Switched to branch 'master'
+fabien@namazu ~/my_awesome_project (master) » cat app.py
+#!/usr/bin/env python
+
+def greetings():
+    print("Hello RESIF people!")
+
+def repeat(x, callback):
+    for _ in range(x):
+        callback()
+
+
+if __name__ == "__main__":
+    repeat(3, greetings)
+----
