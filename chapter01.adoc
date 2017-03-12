@@ -586,3 +586,39 @@ def repeat(x, callback):
 if __name__ == "__main__":
     repeat(3, greetings)
 ----
+
+.Go back to our second commit !
+----
+fabien@namazu ~/my_awesome_project (master) » git checkout b6cb2cc
+Note: checking out 'b6cb2cc'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at b6cb2cc... What an improvement!
+fabien@namazu ~/my_awesome_project (HEAD (no branch)) » cat app.py
+#!/usr/bin/env python2
+
+def greetings():
+    print "Hello RESIF people!"
+
+
+if __name__ == "__main__":
+    greetings()
+----
+
+.Then return to our last version ...
+----
+fabien@namazu ~/my_awesome_project (HEAD (no branch)) » git checkout master
+Previous HEAD position was b6cb2cc... What an improvement!
+Switched to branch 'master'
+----
+
+[NOTE]
+As the `*cd*` command, you can use `*-*` to go back to the previous checkout : `*git checkout -*`
