@@ -622,3 +622,24 @@ Switched to branch 'master'
 
 [NOTE]
 As the `*cd*` command, you can use `*-*` to go back to the previous checkout : `*git checkout -*`
+
+<<<
+.You can also restore specific files from an old changeset
+----
+fabien@namazu ~/my_awesome_project (master +) » git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   app.py
+
+fabien@namazu ~/my_awesome_project (master +) » git reset HEAD app.py
+Unstaged changes after reset:
+M	app.py
+fabien@namazu ~/my_awesome_project (master *) » git checkout app.py
+----
+
+[NOTE]
+As you don't checkout the whole repository, choosen files will be directly staged for the next commit
+(if they are different from the last knew version). That's why we need these additional commands
+to revert back the checkout.
