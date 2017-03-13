@@ -643,3 +643,242 @@ fabien@namazu ~/my_awesome_project (master *) » git checkout app.py
 As you don't checkout the whole repository, choosen files will be directly staged for the next commit
 (if they are different from the last knew version). That's why we need these additional commands
 to revert back the checkout.
+
+<<<
+==== Partial commit
+
+.There is a lack of documentation on your project, let's start a new branch to start documentation
+----
+fabien@namazu ~/my_awesome_project (master) » git checkout -b documentation
+Switched to a new branch 'documentation'
+----
+
+.And update `*app.py*` to add some docstrings
+[source,python]
+----
+#!/usr/bin/env python
+
+def greetings():
+    """Salute RESIF people."""
+    print("Hello RESIF people!")
+
+def repeat(x, callback):
+    """Call x times callback."""
+    for _ in range(x):
+        callback()
+
+
+if __name__ == "__main__":
+    repeat(3, greetings)
+----
+
+.As we comment two functions, we could split our work into two commits
+----
+fabien@namazu ~/my_awesome_project (documentation *) » git add --patch app.py
+diff --git a/app.py b/app.py
+index aac437d..6a1e14a 100755
+--- a/app.py
++++ b/app.py
+@@ -1,9 +1,11 @@
+ #!/usr/bin/env python
+
+ def greetings():
++    """Salute RESIF people."""
+     print("Hello RESIF people!")
+
+ def repeat(x, callback):
++    """Call x times callback."""
+     for _ in range(x):
+         callback()
+
+Stage this hunk [y,n,q,a,d,/,s,e,?]? s
+Split into 2 hunks.
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python
+
+ def greetings():
++    """Salute RESIF people."""
+     print("Hello RESIF people!")
+
+ def repeat(x, callback):
+Stage this hunk [y,n,q,a,d,/,j,J,g,e,?]? y
+@@ -4,6 +5,7 @@
+     print("Hello RESIF people!")
+
+ def repeat(x, callback):
++    """Call x times callback."""
+     for _ in range(x):
+         callback()
+
+Stage this hunk [y,n,q,a,d,/,K,g,e,?]? q
+----
+
+.Verify the status of your repository
+----
+fabien@namazu ~/my_awesome_project (documentation) » git status
+On branch documentation
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   app.py <1>
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   app.py <2>
+----
+<1> A part of our file is staged for the next commit...
+<2> ...but not all the file as we wanted.
+
+.Commit our changes
+----
+fabien@namazu ~/my_awesome_project (documentation) » git diff --staged
+diff --git a/app.py b/app.py
+index aac437d..ada6b00 100755
+--- a/app.py
++++ b/app.py
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python
+
+ def greetings():
++    """Salute RESIF people."""
+     print("Hello RESIF people!")
+
+ def repeat(x, callback):
+fabien@namazu ~/my_awesome_project (documentation) » git commit -m 'Add docstring to greetings()'
+[documentation 942fddd] Add docstring to greetings()
+ 1 file changed, 1 insertion(+)
+fabien@namazu ~/my_awesome_project (documentation *) » git diff
+diff --git a/app.py b/app.py
+index ada6b00..6a1e14a 100755
+--- a/app.py
++++ b/app.py
+@@ -5,6 +5,7 @@ def greetings():
+     print("Hello RESIF people!")
+
+ def repeat(x, callback):
++    """Call x times callback."""
+     for _ in range(x):
+         callback()
+
+fabien@namazu ~/my_awesome_project (documentation *) » git commit -a -m 'Add docstring to repeat()'
+[documentation bee19c3] Add docstring to repeat()
+ 1 file changed, 1 insertion(+)
+----
+
+<<<
+==== Squashing commits
+
+Finally we decide that to have a documentation branch is non-sense and two commits is overkill.
+
+.First have a look to our repository
+----
+    * bee19c3 - Add docstring to repeat()                    (HEAD -> documentation)
+    |
+    |
+    |
+    * 942fddd - Add docstring to greetings()
+    |
+    |
+    |
+    *   6ebe8a3 - Merge branch 'python3'                                    (master)
+    |\
+    | |
+    | |
+    | * 34350f2 - Add Python3 support                                      (python3)
+    | |
+    | |
+    | |
+    * | 449e0a0 - Add repeat() function
+    |/
+    |
+    |
+    * b6cb2cc - What an improvement!
+    |
+    |
+    |
+    * 64188b7 - My first commit!
+----
+
+.Let's go back to our master branch
+----
+fabien@namazu ~/my_awesome_project (documentation) » git checkout master
+Switched to branch 'master'
+----
+
+.Merge using --squash option
+----
+fabien@izanagi ~/my_awesome_project (master) » git merge --squash documentation
+Updating 6ebe8a3..bee19c3
+Fast-forward
+Squash commit -- not updating HEAD
+ app.py | 2 ++
+ 1 file changed, 2 insertions(+)
+----
+
+.What we get ?
+----
+fabien@izanagi ~/my_awesome_project (master +) » git diff --staged
+diff --git a/app.py b/app.py
+index aac437d..6a1e14a 100755
+--- a/app.py
++++ b/app.py
+@@ -1,9 +1,11 @@
+ #!/usr/bin/env python
+
+ def greetings():
++    """Salute RESIF people.""" <1>
+     print("Hello RESIF people!")
+
+ def repeat(x, callback):
++    """Call x times callback.""" <1>
+     for _ in range(x):
+         callback()
+----
+<1> All the modifications from our documentation branch are staged in master branch
+
+.Commit the changes
+----
+fabien@izanagi ~/my_awesome_project (master +) » git commit -a -m 'Add docstrings'
+[master 4035a35] Add docstrings
+ 1 file changed, 2 insertions(+)
+----
+
+.Did we really merge `*documentation*` branch ?
+----
+        <2>
+    * 4035a35 - Add docstrings                                      (HEAD -> master)
+    |
+    |
+    |     <1>
+    | * bee19c3 - Add docstring to repeat()                          (documentation)
+    | |
+    | |
+    | |
+    | * 942fddd - Add docstring to greetings()
+    |/
+    |
+    |
+    *   6ebe8a3 - Merge branch 'python3'
+    |\
+    | |
+    | |
+    | * 34350f2 - Add Python3 support                                      (python3)
+    | |
+    | |
+    | |
+    * | 449e0a0 - Add repeat() function
+    |/
+    |
+    |
+    * b6cb2cc - What an improvement!
+    |
+    |
+    |
+    * 64188b7 - My first commit!
+----
+<1> `*merge --squash*` only retrieved changes from `*documentation*` branch but didn't create a merge
+    relationship. We could delete `*documentation*` branch using the following command :
+    `*git branch -D documentation*`
+<2> Our commit containing all the changes from `*documentation*` branch
