@@ -1,13 +1,10 @@
-== Git, command line tool
-
-=== Why git ?
+== Why git ?
 
 image::images/commitstrip.jpg[CommitStrip]
 
 <<<
-=== Bascis
-
-==== Let's create our first repository
+== Git, command line tool
+=== Let's create our first repository
 
 Simply execute this command :
 
@@ -56,7 +53,7 @@ nothing to commit (create/copy files and use "git add" to track)
 ----
 
 <<<
-==== Our first commit
+=== Our first commit
 
 .Create a file `*app.py*` with the most useful code :
 [source,python]
@@ -163,7 +160,7 @@ Date:   Tue Feb 28 09:34:14 2017 +0100
 ----
 
 <<<
-==== A first look to .git directory
+=== A first look to .git directory
 
 .Our commit created multiple object files inside .git directory.
 ----
@@ -214,7 +211,7 @@ Git store snapshots of your code, not differences like SVN. It's one
 of the reason Git is so fast (but use more space).
 
 <<<
-==== Improve our code
+=== Improve our code
 
 .Have a look to this blob object ... it's our code !
 [source,python]
@@ -275,9 +272,7 @@ Date:   Tue Feb 28 09:34:14 2017 +0100
 
 
 <<<
-=== Mode advanced features
-
-==== Branches
+=== Branches
 
 Branches is a powerful feature of Git. It allows to "fork" your code and to isolate
 the code the time you develop a geature or fix a bug. Any code belongs to a branch
@@ -417,7 +412,7 @@ it's a way to store the work in progress without breaking the rest of the code
 
 
 <<<
-==== Merging
+=== Merging
 
 It's time to bring back Python3 support to our main branch `*master*`. This is done using the `*git merge*`
 command.
@@ -493,7 +488,7 @@ Hello RESIF people!
 
 
 <<<
-==== Restore a file
+=== Restore a file
 
 .You've started to work on your code
 [source,python]
@@ -645,7 +640,7 @@ As you don't checkout the whole repository, choosen files will be directly stage
 to revert back the checkout.
 
 <<<
-==== Partial commit
+=== Partial commit
 
 .There is a lack of documentation on your project, let's start a new branch to start documentation
 ----
@@ -768,7 +763,7 @@ fabien@namazu ~/my_awesome_project (documentation *) » git commit -a -m 'Add do
 ----
 
 <<<
-==== Squashing commits
+=== Squashing commits
 
 Finally we decide that to have a documentation branch is non-sense and two commits is overkill.
 
