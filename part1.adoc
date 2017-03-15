@@ -1,22 +1,21 @@
 <<<
 == Introduction
-=== Why using Git ?
 
-==== ... over SVN ?
+=== Tracking your code
+
+image::images/commitstrip.jpg[CommitStrip]
+
+=== Why using over SVN ?
 
 - Branches are cheap
 - Fast, store whole files not differences
 - Not centralized (DVCS vs VCS)
 - Work offline (commit offline and push when online)
 
-==== Tracking your code
-
-image::images/commitstrip.jpg[CommitStrip]
-
 <<<
-==== Sharing your code
+=== Sharing your code
 
-.Main projects
+.Some projects hosted by GitHub
 [cols="20%,20%,12%,48%", options="header]
 |===
 |Project name
@@ -113,7 +112,7 @@ image::images/commitstrip.jpg[CommitStrip]
 ====
 
 <<<
-==== A bit of history
+=== A bit of history
 
 - Created by Linus Torvalds
 - ... to replace BitKeeper
