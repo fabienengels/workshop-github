@@ -1012,8 +1012,8 @@ fabien@izanagi ~/my_awesome_project (master +) » git commit -a -m 'Add docstrin
 <2> Our commit containing all the changes from `*documentation*` branch
 
 <<<
-== Temp
+==
 
 === Overview of git operations
 
-image::images/Git_operations.svg[]
+image::images/git_operations.svg[]
