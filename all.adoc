@@ -3,7 +3,7 @@ Fabien Engels
 :email: fabien.engels@unistra.fr
 :title-logo-image: images/logo_resif.jpg
 :toc:
-:toclevels: 3
+:toclevels: 2
 :numbered:
 :icons: font
 :source-highlighter: pygments
