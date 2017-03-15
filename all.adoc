@@ -9,3 +9,4 @@ Fabien Engels
 :source-highlighter: pygments
 
 include::part1.adoc[]
+include::part2.adoc[]
