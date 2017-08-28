@@ -1,0 +1,5 @@
+fabien@namazu share/man » find /usr/share/man/man1 -name 'git-*' -exec man {} \; | wc -l
+28197
+
+fabien@namazu Projects/pro_workshop-github (master...origin/master [ahead 2] %) » ls -1 /usr/share/man/man1/git-* | wc -l
+148
